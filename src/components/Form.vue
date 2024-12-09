@@ -1,17 +1,24 @@
 <template>
-  <div class="item">
-    <div>
+  <!-- <div class="item"> -->
+    <div class="">
+    <div class="split left">
       <form @submit.prevent="GenerateIntro">
-        <input type="text" placeholder="search.." v-model="script">
+        <label>Add video script</label>
+        <input type="text" placeholder="Add video script here..." v-model="script">
+        <label v-if="isShow">Please Provide some texts</label>
+        <input type="submit" >
       </form>
     </div>
 
-    <div>
+    <div class="split right">
       <!-- <div id="myIntro">{{ FinalIntro }}</div> -->
-      <button :onclick="CopyIntro">Copy text</button>
+      
+      <label>OUTPUT</label>
 
         <textarea id="myIntro" ref="myIntro" placeholder="" v-model="this.FinalIntro"></textarea>
-    </div>
+        <button class="copyText" :onclick="CopyIntro" >{{ this.copyText }}</button>
+    
+      </div>
     
   </div>
 </template>
@@ -29,9 +36,11 @@ export default {
 
     return {
       script: '',
-      FinalIntro:'test',
+      FinalIntro:'',
       apiUrl: 'https://api.groq.com/openai/v1/chat/completions',
-      token: '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'
+      token: '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',
+      copyText: 'Copy text',
+      isShow: false
     }
 
   },
@@ -45,10 +54,18 @@ export default {
       console.log(Url.value)
       Url.select();
       document.execCommand("copy");
+      this.copyText = 'coppied'
+      setTimeout(() => this.copyText = 'Copy text', 2000);
+
+      
 
     },
     GenerateIntro(){
-      
+      if(this.script == ''){
+this.isShow = true;
+return;
+      }
+      this.isShow = false;
       var ItemJSON = 
         {
           "messages": [{
@@ -90,7 +107,66 @@ xmlhttp.send(JSON.stringify(ItemJSON));
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+  padding: 50px;
+}
+
+label{
+  color:#fff;
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  right: 0;
+}
+
+textarea {
+  width: 100% !important;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit],.copyText {
+  width: 100%;
+  background-color: #325233;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover, .copyText:hover {
+  background-color: #577859;
+  border: 1px solid #898888;
+}
 .item {
   margin-top: 2rem;
   display: flex;
@@ -161,5 +237,11 @@ h3 {
   .item:last-of-type:after {
     display: none;
   }
+}
+@media (max-width: 750px) {
+  .split{
+    padding: 20px !important;
+  }
+  
 }
 </style>
