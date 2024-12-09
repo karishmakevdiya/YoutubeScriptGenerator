@@ -51,7 +51,7 @@ export default {
   methods:{
     CopyIntro(){
       var Url = this.$refs.myIntro;
-      console.log(Url.value)
+      // console.log(Url.value)
       Url.select();
       document.execCommand("copy");
       this.copyText = 'coppied'
@@ -86,8 +86,8 @@ var $this = this
     xmlhttp.onload  = function() {
    var jsonResponse = JSON.parse(xmlhttp.responseText);
    $this.FinalIntro = jsonResponse.choices[0].message.content;
-   console.log(this.FinalIntro)
-   console.log(JSON.parse(xmlhttp.responseText))
+  //  console.log(this.FinalIntro)
+  //  console.log(JSON.parse(xmlhttp.responseText))
    // do something with jsonResponse
 };
 xmlhttp.send(JSON.stringify(ItemJSON));
